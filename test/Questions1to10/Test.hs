@@ -1,13 +1,28 @@
-module Questions1to10.Test (tests) where 
+module Questions1to10.Test (tests) where
 
 import Test.Tasty (TestTree, testGroup)
 import Test.Tasty.HUnit (testCase)
+import Test.Tasty.QuickCheck as QC
+
 import Test.HUnit (Assertion, (@?=))
+import Test.QuickCheck
 
 import Questions1to10
 
 tests :: TestTree
-tests = testGroup "Questions 1 to 10"
+tests = testGroup "Questions 1 to 10" [properties, units]
+
+properties :: TestTree
+properties = testGroup "Properties"
+    [ QC.testProperty "find last of list" propFindLast ]
+
+propFindLast :: [Int] -> Property
+propFindLast xs = 
+    not (null xs) ==>
+        Questions1to10.myLast xs == last xs
+
+units :: TestTree
+units = testGroup "Units"
     [ testCase "find last in int list" testFindLastIntListElement
     , testCase "find last in string" testFindLastCharListElement
     , testCase "find last but one in int list" testFindLastButOneIntListElement
@@ -38,51 +53,51 @@ tests = testGroup "Questions 1 to 10"
     ]
 
 testFindLastIntListElement :: Assertion
-testFindLastIntListElement = 
+testFindLastIntListElement =
     Questions1to10.myLast [1,2,3,4] @?= 4
 
 testFindLastCharListElement :: Assertion
-testFindLastCharListElement = 
+testFindLastCharListElement =
     Questions1to10.myLast "xyz" @?= 'z'
 
 testFindLastButOneIntListElement :: Assertion
-testFindLastButOneIntListElement = 
+testFindLastButOneIntListElement =
     Questions1to10.myButLast [1,2,3,4] @?= 3
 
 testFindLastButOneCharListElement :: Assertion
-testFindLastButOneCharListElement = 
+testFindLastButOneCharListElement =
     Questions1to10.myButLast "xyz" @?= 'y'
 
 testFindKElementOfIntList :: Assertion
-testFindKElementOfIntList = 
+testFindKElementOfIntList =
     Questions1to10.elementAt [1,2,3] 1 @?= 1
 
 testFindKElementOfCharList :: Assertion
-testFindKElementOfCharList = 
+testFindKElementOfCharList =
     Questions1to10.elementAt "haskell" 7 @?= 'l'
 
 testFindLengthOfEmptyList :: Assertion
-testFindLengthOfEmptyList = 
+testFindLengthOfEmptyList =
     Questions1to10.myLength [] @?= 0
 
 testFindLengthOfIntList :: Assertion
-testFindLengthOfIntList = 
+testFindLengthOfIntList =
     Questions1to10.myLength [1,2,3] @?= 3
 
 testFindLengthOfCharList :: Assertion
-testFindLengthOfCharList = 
+testFindLengthOfCharList =
     Questions1to10.myLength "Hello, world!" @?= 13
 
 testReverseEmptyList :: Assertion
-testReverseEmptyList = 
+testReverseEmptyList =
     Questions1to10.myReverse ([] :: [Int]) @?= ([] :: [Int])
 
 testReverseString :: Assertion
-testReverseString = 
+testReverseString =
     Questions1to10.myReverse "hello" @?= "olleh"
 
 testReverseIntList :: Assertion
-testReverseIntList = 
+testReverseIntList =
     Questions1to10.myReverse [1,2,3,4] @?= [4,3,2,1]
 
 testIntListThatIsPalindrome :: Assertion
@@ -102,7 +117,7 @@ testStringThatIsNotPalindrome =
     Questions1to10.isPalindrome "not palindrome" @?= False
 
 testFlattenEmptyList :: Assertion
-testFlattenEmptyList = 
+testFlattenEmptyList =
     Questions1to10.flatten (List []) @?= ([] :: [Int])
 
 testFlattenSingleElement :: Assertion
@@ -110,7 +125,7 @@ testFlattenSingleElement =
     Questions1to10.flatten (Elem 5) @?= [5]
 
 testFlattenList :: Assertion
-testFlattenList = 
+testFlattenList =
     Questions1to10.flatten (List [List [Elem 1], List [Elem 2, List [Elem 3, Elem 4]]]) @?= [1,2,3,4]
 
 testCompressEmptyList :: Assertion
@@ -122,7 +137,7 @@ testCompressListWithSameChars =
     Questions1to10.compress "aaaabccaadeeee" @?= "abcade"
 
 testPackEmptyList :: Assertion
-testPackEmptyList = 
+testPackEmptyList =
     Questions1to10.pack [] @?= ([] :: [String])
 
 testPackListWith2ConsecutiveSameChars :: Assertion
