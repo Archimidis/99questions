@@ -17,6 +17,7 @@ library
   exposed-modules:     Questions1to10
                        , Questions11to20
                        , Questions21to28
+                       , Questions31to41
   -- other-modules:       
   -- other-extensions:    
   build-depends:       base >=4.8 && <4.9
