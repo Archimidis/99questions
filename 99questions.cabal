@@ -18,6 +18,7 @@ library
                        , Questions11to20
                        , Questions21to28
                        , Questions31to41
+                       , Questions46to50
   -- other-modules:       
   -- other-extensions:    
   build-depends:       base >=4.8 && <4.9
