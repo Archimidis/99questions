@@ -20,16 +20,18 @@ properties = testGroup "Properties"
 
 units :: TestTree
 units = testGroup "Units"
-    [ testWithProvider "table" testTable exapmlesForTable
-    , testWithProvider "tablen" testTablen exapmlesForTablen
-    , testWithProvider "tablen" testGray examplesForGray
+    [ testWithProvider "table" testTable examplesForTable
+    , testWithProvider "tablen" testTablen examplesForTablen
+    , testWithProvider "gray" testGray examplesForGray
+    , testWithProvider "huffman" testHuffman examplesForHuffman
+    , testWithProvider "Huffman creation" testHuffmanTreeCreation examplesForHuffmanTree
     ]
 
 testTable :: (Bool -> Bool -> Bool, [[Bool]]) -> Assertion
 testTable (lambda, expected) =
     Questions46to50.table lambda @?= expected
 
-exapmlesForTable =
+examplesForTable =
     [
         (
             and',
@@ -73,7 +75,7 @@ testTablen :: (Int, [Bool] -> Bool, [[Bool]]) -> Assertion
 testTablen (n, lambda, expected) =
     Questions46to50.tablen n lambda @?= expected
 
-exapmlesForTablen =
+examplesForTablen =
     [
         (
             3,
@@ -101,4 +103,72 @@ examplesForGray =
         (1,  ["0","1"]),
         (2,  ["00","01","11","10"]),
         (3,  ["000","001","011","010","110","111","101","100"])
+    ]
+
+testHuffman :: ([(Symbol, Weight)], [(Symbol, Code)]) -> Assertion
+testHuffman (input, expected) =
+    Questions46to50.huffman input @?= expected
+
+examplesForHuffman :: [([(Symbol, Weight)], [(Symbol, Code)])]
+examplesForHuffman =
+    [
+        (
+            [],
+            []
+        ),
+        (
+            [('a', 1)],
+            [('a', "")]
+        ),
+        (
+            [('a', 0.5), ('b', 0.5)],
+            [('a', "0"),('b', "1")]
+        ),
+        (
+            [('a', 0.1), ('b', 0.3), ('c', 0.7)],
+            [('a', "00"),('b', "01"),('c',"1")]
+        ),
+        (
+            [('a',45),('b',13),('c',12),('d',16),('e',9),('f',5)],
+            [('a',"0"),('b',"101"),('c',"100"),('d',"111"),('e',"1101"),('f',"1100")]
+        )
+    ]
+
+testHuffmanTreeCreation :: ([(Weight, HuffmanTree Char)], HuffmanTree Char) -> Assertion
+testHuffmanTreeCreation (input, expected) =
+    Questions46to50.createHuffmanTree input @?= expected
+
+examplesForHuffmanTree :: [([(Weight, HuffmanTree Char)], HuffmanTree Char)]
+examplesForHuffmanTree =
+    [
+        (
+            [(0.5, Leaf 'a')],
+            Leaf 'a'
+        ),
+        (
+            [(0.5, Leaf 'a'), (0.5, Leaf 'b')],
+            InternalNode (Leaf 'a') (Leaf 'b')
+        ),
+        (
+            [(0.1, Leaf 'a'), (0.3, Leaf 'b'), (0.7, Leaf 'c')],
+            InternalNode
+                (InternalNode (Leaf 'a') (Leaf 'b'))
+                (Leaf 'c')
+        ),
+        (
+            [(0.03, Leaf 'a'), (0.07, Leaf 'b'), (0.3, Leaf 'c'), (0.6, Leaf 'd')],
+            InternalNode
+                (InternalNode
+                    (InternalNode (Leaf 'a') (Leaf 'b'))
+                    (Leaf 'c'))
+                (Leaf 'd')
+        ),
+        (
+            [(0.3, Leaf 'c'), (0.07, Leaf 'b'), (0.6, Leaf 'd'), (0.03, Leaf 'a')],
+            InternalNode
+                (InternalNode
+                    (InternalNode (Leaf 'a') (Leaf 'b'))
+                    (Leaf 'c'))
+                (Leaf 'd')
+        )
     ]
