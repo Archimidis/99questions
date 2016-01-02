@@ -1,4 +1,22 @@
-module Questions46to50 where
+module Questions46to50
+( and'
+, or'
+, nand'
+, nor'
+, xor'
+, impl'
+, equ'
+, table
+, tablen
+, gray
+, grayV2
+, HuffmanTree(Leaf, InternalNode)
+, Weight
+, Symbol
+, Code
+, huffman
+, createHuffmanTree
+) where
 
 import Control.Arrow (second)
 import Control.Monad (replicateM)
