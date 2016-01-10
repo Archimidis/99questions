@@ -33,6 +33,7 @@ units = testGroup "Units"
     , testWithProvider "symmetric" testSymmetric examplesForSymmetric
     , testWithProvider "construct" testConstruct examplesForConstruct
     , testWithProvider "symCbalTrees" testSymCbalTrees examplesForSymCbalTrees
+    , testWithProvider "symCbalTrees" testHbalTreeNodes examplesForHbalTreeNodes
     ]
 
 testCbalTree :: (Int, [Tree Char]) -> Assertion
@@ -148,4 +149,20 @@ examplesForSymCbalTrees =
                 (Branch 'x' (leaf 'x') Empty)
                 (Branch 'x' Empty (leaf 'x'))
         ])
+    ]
+
+testHbalTreeNodes :: (Char, Int, [Tree Char]) -> Assertion
+testHbalTreeNodes (e, nodes, expected) = 
+    Questions54Ato60.hbalTreeNodes e nodes @?= expected
+
+examplesForHbalTreeNodes :: [(Char, Int, [Tree Char])]
+examplesForHbalTreeNodes =
+    [
+        ('x', 0, [Empty]),
+        ('x', 1, [leaf 'x']),
+        ('x', 2, [
+            Branch 'x' Empty (leaf 'x'),
+            Branch 'x' (leaf 'x') Empty
+        ]),
+        ('x', 3, [Branch 'x' (leaf 'x') (leaf 'x')])
     ]

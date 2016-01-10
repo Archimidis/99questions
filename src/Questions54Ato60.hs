@@ -1,4 +1,4 @@
-module Questions54Ato60
+module Questions54Ato60 where
 {-( Tree(Empty, Branch)-}
 {-, leaf-}
 {-, btreeNodes-}
@@ -9,8 +9,8 @@ module Questions54Ato60
 {-, construct-}
 {-, symCbalTrees-}
 {-, hbalTree-}
-{-)-}
-where
+{-, hbalTreeNodes-}
+{-) where-}
 
 import Math(fibs)
 
@@ -103,7 +103,22 @@ minHeight nodes =
 
 maxHeight :: Int -> Int
 maxHeight nodes =
-    ceiling $ 1.44 * logBase (2 :: Float) (fromIntegral (nodes+1)) - 1.33
+    length (takeWhile (<= nodes + 1) fibs) - 3
 
-hbalTreeNodes :: a -> [Tree a]
-hbalTreeNodes = undefined
+hbalTreeNodes :: a -> Int -> [Tree a]
+hbalTreeNodes _ 0 = [Empty]
+hbalTreeNodes e 1 = [leaf e]
+hbalTreeNodes e nodeLimit =
+    concatMap (createTree nodeLimit) [(minHeight nodeLimit) .. (maxHeight nodeLimit)]
+    where 
+        createTree _ 0 = [Empty]
+        createTree _ 1 = [leaf e]
+        createTree n h =
+            [Branch e l r |
+                (hl, hr) <- [(h-2, h-1), (h-1, h-1), (h-1, h-2)],
+                let leftMinNodes = max (minNodes hl) (n-1 - maxNodes hr),
+                let leftMaxNodes = min (maxNodes hl) (n-1 - minNodes hr),
+                leftNodes <- [leftMinNodes .. leftMaxNodes],
+                let rightNodes = n-1 - leftMaxNodes,
+                l <- createTree leftNodes hl,
+                r <- createTree rightNodes hr]
