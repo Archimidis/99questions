@@ -19,7 +19,8 @@ library
                        , Questions21to28
                        , Questions31to41
                        , Questions46to50
-  -- other-modules:       
+                       , Questions54Ato60
+  other-modules:       Math
   -- other-extensions:    
   build-depends:       base >=4.8 && <4.9
                        , random
